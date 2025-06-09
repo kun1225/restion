@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
+    '@pinia/nuxt',
   ],
   shadcn: {
     prefix: '',

@@ -26,7 +26,7 @@ const props = defineProps<{
         <Button
           size="lg"
           :variant="props.isPaused ? 'default' : 'outline'"
-          :aria-label="props.isPaused ? 'Start Timer' : 'Pause Timer'"
+          :aria-label="props.isPaused ? '開始計時' : '暫停計時'"
           @click="
             () => {
               if (props.isPaused) {
@@ -45,16 +45,14 @@ const props = defineProps<{
       </TooltipTrigger>
 
       <TooltipContent side="bottom">
-        {{ props.isPaused ? 'Start Timer' : 'Pause Timer' }}
+        {{ props.isPaused ? '開始計時' : '暫停計時' }}
       </TooltipContent>
     </Tooltip>
 
     <Tooltip>
       <TooltipTrigger as-child>
         <Button
-          :aria-label="
-            props.phase === 'focus' ? 'Skip to Rest' : 'Skip to Focus'
-          "
+          :aria-label="props.phase === 'focus' ? '開始休息' : '開始專注'"
           size="lg"
           @click="props.onSkip"
         >
@@ -70,7 +68,7 @@ const props = defineProps<{
       </TooltipTrigger>
 
       <TooltipContent side="bottom">
-        {{ props.phase === 'focus' ? 'Skip to Rest' : 'Skip to Focus' }}
+        {{ props.phase === 'focus' ? '開始休息' : '開始專注' }}
       </TooltipContent>
     </Tooltip>
 
@@ -93,7 +91,7 @@ const props = defineProps<{
       </TooltipTrigger>
 
       <TooltipContent side="bottom">
-        {{ props.isLooping ? 'Set Loop Off' : 'Set Loop On' }}
+        {{ props.isLooping ? '關閉循環' : '啟動循環' }}
       </TooltipContent>
     </Tooltip>
   </div>

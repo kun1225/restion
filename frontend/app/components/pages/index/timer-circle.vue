@@ -66,7 +66,7 @@ function formatTimeFromSeconds(seconds: number) {
       :style="{ width: size + 'px', height: size + 'px', top: 0, left: 0 }"
     >
       <span class="mb-1 tracking-wide">
-        {{ phase === 'focus' ? 'focusing' : 'resting' }}
+        {{ phase === 'focus' ? '專注中' : '休息中' }}
       </span>
       <span class="text-4xl font-bold tabular-nums">{{ formattedTime }}</span>
     </div>
