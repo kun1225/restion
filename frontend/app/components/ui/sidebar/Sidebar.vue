@@ -61,7 +61,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
     </SheetContent>
   </Sheet>
 
-  <div
+  <aside
     v-else
     class="text-sidebar-foreground group peer hidden md:block"
     data-slot="sidebar"
@@ -106,5 +106,5 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
         <slot />
       </div>
     </div>
-  </div>
+  </aside>
 </template>

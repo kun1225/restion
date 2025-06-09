@@ -12,11 +12,14 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import appSidebarButtonLabel from './app-sidebar-button-label.vue';
+import AppSidebarButtonLabel from './app-sidebar-button-label.vue';
 import type { AppSidebarGroup } from '~~/types/type-app-sidebar';
+import { useSidebar } from '@/components/ui/sidebar';
 
 const props = defineProps<AppSidebarGroup>();
 const { title, items } = toRefs(props);
+
+const { open } = useSidebar();
 </script>
 
 <template>
@@ -31,7 +34,7 @@ const { title, items } = toRefs(props);
           >
             <SidebarMenuItem>
               <CollapsibleTrigger as-child>
-                <SidebarMenuButton>
+                <SidebarMenuButton :tooltip="open ? undefined : item.title">
                   <component :is="item?.icon" />
                   <span>{{ item.title }}</span>
                 </SidebarMenuButton>
@@ -54,7 +57,10 @@ const { title, items } = toRefs(props);
           </Collapsible>
 
           <SidebarMenuItem v-else>
-            <SidebarMenuButton as-child>
+            <SidebarMenuButton
+              as-child
+              :tooltip="open ? undefined : item.title"
+            >
               <NuxtLink :to="item.url">
                 <component :is="item.icon" />
                 <AppSidebarButtonLabel :label="item.title" />
