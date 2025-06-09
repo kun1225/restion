@@ -61,7 +61,7 @@ alwaysApply: true
 
 | 角色      | 敘述                              | 驗收準則                              |
 | ------- | ------------------------------- | --------------------------------- |
-| 作為學生    | 我想設定休息比例 6，在專注 90 分鐘，休息時間因為 15 分鐘 | 結束專注後，計時器自動顯示 15 休息時間。        |
+| 作為學生    | 我想設定休息比例 6，專注 90 分鐘後，休息時間因為 15 分鐘 | 結束專注後，計時器自動顯示 15 休息時間。        |
 | 作為設計師   | 我想要每 30 分鐘收到提醒但不暫停計時            | 在專注倒數中, 系統於每 30 分鐘彈出提醒並播放音效, 計時不中斷。 |
 | 作為遠距工作者 | 我想上傳白噪音 MP3 作為背景音樂              | MP3 成功上傳後排進播放清單, 並可立即播放。           |
 | 作為自由職業者 | 我想用我拍的海邊照片作為背景                  | 圖片套用後, UI 背景即時更新。                  |
@@ -115,10 +115,13 @@ alwaysApply: true
 ## 8. 技術架構
 
 ### 8.1 前端技術架構
-Vue / Nuxt 4、TypeScript、Tailwind CSS、PWA。
+* Vue / Nuxt 4、TypeScript
+* Tailwind CSS。
+* shadcn-vue UI library (https://www.shadcn-vue.com/docs/introduction.html) 
+* Nuxt-icon 的 lucide
 
 ### 8.2 後端技術架構
-Node.js + Express (REST), Cloud Functions。
+Node.js + Express (REST)。
 
 ### 8.3 資料庫
 PostgreSQL (使用 Knex.js)。
