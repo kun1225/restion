@@ -30,7 +30,6 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 
-// 主要功能菜單
 const mainItems = [
   {
     title: '計時器',
@@ -44,7 +43,6 @@ const mainItems = [
   },
 ];
 
-// 設定菜單 - 支援多層級
 const settingsItems = [
   {
     title: '計時設定',
@@ -90,7 +88,6 @@ const settingsItems = [
   },
 ];
 
-// 其他功能
 const otherItems = [
   {
     title: '團隊協作',
@@ -107,18 +104,21 @@ const otherItems = [
 
 <template>
   <Sidebar>
-    <!-- 頭部 - Logo 區域 -->
-    <SidebarHeader class="border-b">
-      <div class="flex items-center gap-2 px-4 py-2">
-        <Timer class="h-6 w-6 text-primary" />
-        <span class="font-bold text-lg group-data-[collapsible=icon]:hidden">
-          Restion
-        </span>
-      </div>
+    <!-- Header -->
+    <SidebarHeader class="relative">
+      <SidebarMenuButton
+        class="w-fit text-lg transition-all group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
+      >
+        R
+      </SidebarMenuButton>
+      <SidebarTrigger
+        class="absolute right-1 top-1/2 -translate-y-1/2 border group-data-[collapsible=icon]:border-transparent"
+      />
     </SidebarHeader>
+    <SidebarSeparator />
 
     <SidebarContent>
-      <!-- 主要功能區 -->
+      <!-- Main -->
       <SidebarGroup>
         <SidebarGroupLabel>主要功能</SidebarGroupLabel>
         <SidebarGroupContent>
@@ -126,8 +126,11 @@ const otherItems = [
             <SidebarMenuItem v-for="item in mainItems" :key="item.title">
               <SidebarMenuButton as-child>
                 <NuxtLink :to="item.url">
-                  <component :is="item.icon" class="h-4 w-4" />
-                  <span>{{ item.title }}</span>
+                  <component :is="item.icon" />
+                  <span
+                    class="transition-opacity group-data-[collapsible=icon]:opacity-0"
+                    >{{ item.title }}</span
+                  >
                 </NuxtLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -137,7 +140,7 @@ const otherItems = [
 
       <SidebarSeparator />
 
-      <!-- 設定區 - 支援摺疊子菜單 -->
+      <!-- Settings  -->
       <SidebarGroup>
         <SidebarGroupLabel>設定管理</SidebarGroupLabel>
         <SidebarGroupContent>
@@ -176,7 +179,7 @@ const otherItems = [
 
       <SidebarSeparator />
 
-      <!-- 其他功能區 -->
+      <!-- Other -->
       <SidebarGroup>
         <SidebarGroupLabel>其他</SidebarGroupLabel>
         <SidebarGroupContent>
@@ -194,10 +197,10 @@ const otherItems = [
       </SidebarGroup>
     </SidebarContent>
 
-    <!-- 底部 -->
+    <!-- Footer -->
     <SidebarFooter class="border-t">
       <div
-        class="p-2 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden"
+        class="text-muted-foreground p-2 text-xs group-data-[collapsible=icon]:hidden"
       >
         Restion v1.0.0
       </div>
