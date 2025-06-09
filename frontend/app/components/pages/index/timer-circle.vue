@@ -4,8 +4,8 @@ import type { TimerPhase } from '../../../composables/useTimer';
 
 const props = defineProps<{
   progress: number;
-  focusDuration: number;
-  remainingRestDuration: number;
+  focusSeconds: number;
+  remainingRestSeconds: number;
   phase: TimerPhase;
   size?: number;
   stroke?: number;
@@ -18,22 +18,22 @@ const circumference = computed(() => 2 * Math.PI * radius.value);
 
 const formattedTime = computed(() => {
   if (props.phase === 'focus') {
-    return formatTime(props.focusDuration);
+    return formatTimeFromSeconds(props.focusSeconds);
   } else {
-    return formatTime(props.remainingRestDuration);
+    return formatTimeFromSeconds(props.remainingRestSeconds);
   }
 });
 
-function formatTime(duration: number) {
-  const m = Math.floor(duration / 60);
-  const s = duration % 60;
+function formatTimeFromSeconds(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center">
-    <svg :width="size" :height="size" class="block relative">
+    <svg :width="size" :height="size" class="relative block">
       <circle
         :r="radius"
         :cx="size / 2"
@@ -57,11 +57,11 @@ function formatTime(duration: number) {
       />
     </svg>
     <div
-      class="absolute top-0 left-0 pointer-events-none flex flex-col items-center justify-center"
+      class="pointer-events-none absolute left-0 top-0 flex flex-col items-center justify-center"
       :style="{ width: size + 'px', height: size + 'px', top: 0, left: 0 }"
     >
       <span class="text-4xl font-bold tabular-nums">{{ formattedTime }}</span>
-      <span class="mt-1 text-sm text-gray-500 dark:text-gray-400 tracking-wide">
+      <span class="mt-1 text-sm tracking-wide text-gray-500 dark:text-gray-400">
         {{ phase === 'focus' ? 'focusing' : 'resting' }}
       </span>
     </div>

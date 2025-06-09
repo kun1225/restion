@@ -14,9 +14,10 @@ const onRestInput = (e: Event) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 w-full max-w-xs mx-auto mt-6">
+  <div class="mx-auto mt-6 flex w-full max-w-xs flex-col gap-6">
     <div>
-      <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+      <label
+        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-200"
         >休息比率（專注 ÷ 比例 = 休息）</label
       >
       <div class="flex items-center gap-3">
@@ -33,7 +34,7 @@ const onRestInput = (e: Event) => {
           min="1"
           max="20"
           :value="restRatio"
-          class="w-16 px-2 py-1 border rounded text-center dark:bg-gray-800 dark:border-gray-600"
+          class="w-16 rounded border px-2 py-1 text-center dark:border-gray-600 dark:bg-gray-800"
           @input="onRestInput($event)"
         />
       </div>

@@ -23,14 +23,16 @@ const {
   isPaused,
   isRunning,
   focusDuration,
+  focusSeconds,
   restDuration,
-  remainingRestDuration,
+  remainingRestSeconds,
   progress,
   start,
   pause,
   resume,
   reset,
   skip,
+  finishFocus,
 } = timer;
 
 const toggleLoop = () => {
@@ -51,8 +53,8 @@ const toggleLoop = () => {
       <CardContent>
         <TimerCircle
           :progress="progress"
-          :focus-duration="focusDuration"
-          :remaining-rest-duration="remainingRestDuration"
+          :focus-seconds="focusSeconds"
+          :remaining-rest-seconds="remainingRestSeconds"
           :phase="phase"
           class="relative mb-4"
         />
@@ -61,11 +63,14 @@ const toggleLoop = () => {
           :is-running="isRunning"
           :is-paused="isPaused"
           :is-looping="isLooping"
+          :phase="phase"
+          :focus-duration="focusDuration"
           :on-start="start"
           :on-pause="pause"
           :on-resume="resume"
           :on-reset="reset"
           :on-skip="skip"
+          :on-finish-focus="finishFocus"
           :on-toggle-loop="toggleLoop"
         />
 
