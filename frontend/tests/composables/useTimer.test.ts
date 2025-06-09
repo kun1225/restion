@@ -41,7 +41,6 @@ describe('useTimer', () => {
       expect(timer.focusDuration.value).toBe(0);
       expect(timer.phase.value).toBe('focus');
       expect(timer.isPaused.value).toBe(true);
-      expect(timer.isRunning.value).toBe(false);
       expect(timer.remainingRestDuration.value).toBe(0);
     });
 
@@ -60,7 +59,6 @@ describe('useTimer', () => {
       expect(timer.phase.value).toBe('focus');
       expect(timer.focusDuration.value).toBe(0);
       expect(timer.isPaused.value).toBe(false);
-      expect(timer.isRunning.value).toBe(true);
     });
 
     it('專注計時應該正確累加時間', () => {
@@ -165,21 +163,6 @@ describe('useTimer', () => {
   });
 
   describe('重置和跳過功能', () => {
-    it('重置應該恢復到初始狀態', () => {
-      timer.start();
-      for (let i = 0; i < 300; i++) {
-        intervalCallback();
-      }
-      timer.finishFocus();
-
-      timer.reset();
-
-      expect(timer.phase.value).toBe('focus');
-      expect(timer.focusDuration.value).toBe(0);
-      expect(timer.remainingRestDuration.value).toBe(0);
-      expect(timer.isPaused.value).toBe(true);
-    });
-
     it('在專注階段跳過應該進入休息', () => {
       timer.start();
       for (let i = 0; i < 300; i++) {

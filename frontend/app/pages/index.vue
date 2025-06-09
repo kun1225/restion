@@ -14,6 +14,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+definePageMeta({
+  keepalive: true,
+});
+
 const timer = useTimer();
 
 const {
@@ -21,18 +25,12 @@ const {
   isLooping,
   phase,
   isPaused,
-  isRunning,
-  focusDuration,
   focusSeconds,
-  restDuration,
-  remainingRestSeconds,
+  restSeconds,
   progress,
   start,
   pause,
-  resume,
-  reset,
   skip,
-  finishFocus,
 } = timer;
 
 const toggleLoop = () => {
@@ -46,7 +44,7 @@ const toggleLoop = () => {
       <CardHeader>
         <CardTitle class="sr-only">Timer</CardTitle>
         <CardDescription class="sr-only">
-          {{ focusDuration }} 分鐘專注，{{ restDuration }} 分鐘休息
+          {{ phase === 'focus' ? 'is focusing' : 'is resting' }}
         </CardDescription>
       </CardHeader>
 
@@ -54,37 +52,29 @@ const toggleLoop = () => {
         <TimerCircle
           :progress="progress"
           :focus-seconds="focusSeconds"
-          :remaining-rest-seconds="remainingRestSeconds"
+          :rest-seconds="restSeconds"
           :phase="phase"
           class="relative mb-4"
         />
 
         <TimerControls
-          :is-running="isRunning"
           :is-paused="isPaused"
           :is-looping="isLooping"
           :phase="phase"
-          :focus-duration="focusDuration"
           :on-start="start"
           :on-pause="pause"
-          :on-resume="resume"
-          :on-reset="reset"
           :on-skip="skip"
-          :on-finish-focus="finishFocus"
           :on-toggle-loop="toggleLoop"
         />
 
-        <TimerSettings
-          :focus-duration="focusDuration"
+        <!-- <TimerSettings
           :rest-ratio="restRatio"
-          @update:focus-duration="(val) => (focusDuration = val)"
           @update:rest-ratio="(val) => (restRatio = val)"
-        />
+        /> -->
 
         <CardFooter>
-          <div class="mt-6 text-center text-xs text-gray-400">
+          <div class="mx-auto mt-6 text-center text-xs text-gray-400">
             <div>休息時間 = 專注時間 ÷ 比例</div>
-            <div>目前休息：{{ restDuration }} 分鐘</div>
           </div>
         </CardFooter>
       </CardContent>

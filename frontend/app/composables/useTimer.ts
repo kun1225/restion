@@ -4,55 +4,54 @@ import { useIntervalFn } from '@vueuse/core';
 export type TimerPhase = 'focus' | 'rest';
 
 export const useTimer = () => {
-  // settings
+  // Settings
   const restRatio = ref(5); // default 5:1
   const isLooping = ref(true);
 
-  // states
-  const focusSeconds = ref(0); // total focus seconds
+  // States
+  const focusSeconds = ref(0); // focus time in seconds
+  const restSeconds = ref(0); // rest time in seconds
+  const currentStageRestSeconds = ref(0);
   const phase = ref<TimerPhase>('focus');
   const isPaused = ref(true);
-  const isRunning = computed(() => !isPaused.value);
+
   const isFocusing = computed(() => phase.value === 'focus');
   const isResting = computed(() => phase.value === 'rest');
 
-  // time calculation in minutes
-  const focusDuration = computed(() => Math.floor(focusSeconds.value / 60));
-  const restDuration = computed(() =>
-    Math.max(1, Math.round(focusDuration.value / restRatio.value)),
-  );
-
-  const restSeconds = ref(0);
-  const remainingRestSeconds = computed(() => {
-    const totalRestSeconds = restDuration.value * 60;
-    return Math.max(0, totalRestSeconds - restSeconds.value);
-  });
-
-  // progress percentage
+  // Progress percentage (only shown during rest phase)
   const progress = computed(() => {
     if (phase.value === 'focus') {
-      // For focus phase, we don't show progress since there's no predefined duration
-      return 0;
+      return 1; // no progress shown during focus phase
     } else {
-      // For rest phase, show countdown progress
-      const totalRestSeconds = restDuration.value * 60;
-      if (totalRestSeconds === 0) return 0;
-      return Math.max(0, restSeconds.value / totalRestSeconds);
+      if (currentStageRestSeconds.value === 0) return 1;
+
+      return (
+        (currentStageRestSeconds.value - restSeconds.value) /
+        currentStageRestSeconds.value
+      );
     }
   });
 
-  // countdown timer
+  // Timer
   const { pause, resume } = useIntervalFn(
     () => {
+      if (isPaused.value) return;
+
       if (phase.value === 'focus') {
         focusSeconds.value += 1;
       } else if (phase.value === 'rest') {
-        restSeconds.value += 1;
+        restSeconds.value -= 1;
 
-        // Check if rest period is finished
-        const totalRestSeconds = restDuration.value * 60;
-        if (restSeconds.value >= totalRestSeconds) {
-          handleRestComplete();
+        // Rest time ended
+        if (restSeconds.value <= 0) {
+          phase.value = 'focus';
+          focusSeconds.value = 0;
+
+          if (isLooping.value) {
+            start();
+          } else {
+            pause();
+          }
         }
       }
     },
@@ -60,103 +59,59 @@ export const useTimer = () => {
     { immediate: false },
   );
 
-  const handleRestComplete = () => {
-    if (isLooping.value) {
-      // Start new focus session
-      startFocusPhase();
-    } else {
-      // Stop the timer
-      isPaused.value = true;
-      phase.value = 'focus';
-    }
-  };
-
-  const startFocusPhase = () => {
-    phase.value = 'focus';
-    focusSeconds.value = 0;
-    isPaused.value = false;
-  };
-
-  const startRestPhase = () => {
-    if (focusDuration.value === 0) return; // Can't rest without focus time
-
-    phase.value = 'rest';
-    restSeconds.value = 0;
-    isPaused.value = false;
-  };
-
+  // Watch pause state
   watch(isPaused, (val) => {
     if (val) pause();
     else resume();
   });
 
-  // methods
   const start = () => {
-    if (phase.value === 'focus') {
-      startFocusPhase();
-    } else if (phase.value === 'rest') {
-      startRestPhase();
-    }
-  };
-
-  const finishFocus = () => {
-    if (phase.value === 'focus' && focusDuration.value > 0) {
-      isPaused.value = true;
-      startRestPhase();
-    }
+    isPaused.value = false;
   };
 
   const pauseTimer = () => {
     isPaused.value = true;
   };
 
-  const resumeTimer = () => {
-    isPaused.value = false;
-  };
-
-  const reset = () => {
-    isPaused.value = true;
-    phase.value = 'focus';
-    focusSeconds.value = 0;
-    restSeconds.value = 0;
-  };
-
   const skip = () => {
     if (phase.value === 'focus') {
-      // Skip to rest if there's focus time
-      if (focusDuration.value > 0) {
-        finishFocus();
-      }
+      // Skip from focus to rest
+      phase.value = 'rest';
+      restSeconds.value = Math.floor(focusSeconds.value / restRatio.value);
+      currentStageRestSeconds.value = restSeconds.value;
     } else {
-      // Skip rest and start new focus or stop
-      handleRestComplete();
+      // Skip from rest to focus (or end)
+      phase.value = 'focus';
+      focusSeconds.value = 0;
+      restSeconds.value = 0;
+      currentStageRestSeconds.value = 0;
+    }
+
+    if (isLooping.value) {
+      start();
+    } else {
+      pause();
     }
   };
 
+  // Cleanup
   onUnmounted(() => pause());
 
   return {
-    // settings
+    // Settings
     restRatio,
     isLooping,
-    // states
-    focusDuration,
+    // States
     focusSeconds,
+    restSeconds,
     phase,
-    remainingRestSeconds,
     isPaused,
-    isRunning,
     isFocusing,
     isResting,
-    // time
-    restDuration,
     progress,
-    // methods
+    // Methods
     start,
     pause: pauseTimer,
-    resume: resumeTimer,
-    reset,
     skip,
-    finishFocus,
   };
 };

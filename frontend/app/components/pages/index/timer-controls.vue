@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button';
 import type { TimerPhase } from '~/composables/useTimer';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '~/components/ui/tooltip';
 
 const props = defineProps<{
-  isRunning: boolean;
   isPaused: boolean;
   isLooping: boolean;
   phase: TimerPhase;
-  focusDuration: number;
   onStart: () => void;
   onPause: () => void;
-  onResume: () => void;
-  onReset: () => void;
   onSkip: () => void;
-  onFinishFocus: () => void;
   onToggleLoop: () => void;
 }>();
 </script>
@@ -21,55 +21,80 @@ const props = defineProps<{
 <template>
   <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
     <!-- Start button - only show when not running -->
-    <Button v-if="!props.isRunning" aria-label="Start" @click="props.onStart">
-      {{ props.phase === 'focus' ? 'Start Focus' : 'Start Rest' }}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <Button
+          size="lg"
+          :variant="props.isPaused ? 'default' : 'outline'"
+          :aria-label="props.isPaused ? 'Start Timer' : 'Pause Timer'"
+          @click="
+            () => {
+              if (props.isPaused) {
+                props.onStart();
+              } else {
+                props.onPause();
+              }
+            }
+          "
+        >
+          <Icon
+            :name="props.isPaused ? 'lucide:play' : 'lucide:stretch-vertical'"
+            :mode="'svg'"
+          />
+        </Button>
+      </TooltipTrigger>
 
-    <!-- Pause button - only show when running and not paused -->
-    <Button
-      v-if="props.isRunning && !props.isPaused"
-      aria-label="Pause"
-      @click="props.onPause"
-    >
-      Pause
-    </Button>
+      <TooltipContent side="bottom">
+        {{ props.isPaused ? 'Start Timer' : 'Pause Timer' }}
+      </TooltipContent>
+    </Tooltip>
 
-    <!-- Resume button - only show when paused but still running -->
-    <Button
-      v-if="props.isPaused && props.isRunning"
-      aria-label="Resume"
-      @click="props.onResume"
-    >
-      Resume
-    </Button>
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <Button
+          :aria-label="
+            props.phase === 'focus' ? 'Skip to Rest' : 'Skip to Focus'
+          "
+          size="lg"
+          @click="props.onSkip"
+        >
+          <Icon
+            :name="
+              props.phase === 'focus'
+                ? 'lucide:circle-stop'
+                : 'lucide:skip-forward'
+            "
+            :mode="'svg'"
+          />
+        </Button>
+      </TooltipTrigger>
 
-    <!-- Finish Focus button - only show during focus phase when there's focus time -->
-    <Button
-      v-if="props.phase === 'focus' && props.focusDuration > 0"
-      aria-label="Finish Focus"
-      variant="secondary"
-      @click="props.onFinishFocus"
-    >
-      Finish Focus
-    </Button>
-
-    <!-- Reset button - always available -->
-    <Button aria-label="Reset" variant="outline" @click="props.onReset">
-      Reset
-    </Button>
-
-    <!-- Skip button - context-sensitive label -->
-    <Button aria-label="Skip" variant="outline" @click="props.onSkip">
-      {{ props.phase === 'focus' ? 'Skip to Rest' : 'Skip Rest' }}
-    </Button>
+      <TooltipContent side="bottom">
+        {{ props.phase === 'focus' ? 'Skip to Rest' : 'Skip to Focus' }}
+      </TooltipContent>
+    </Tooltip>
 
     <!-- Loop toggle button -->
-    <Button
-      :variant="props.isLooping ? 'default' : 'outline'"
-      aria-label="Toggle Loop"
-      @click="props.onToggleLoop"
-    >
-      {{ props.isLooping ? 'Loop On' : 'Loop Off' }}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <Button
+          size="lg"
+          :variant="props.isLooping ? 'default' : 'outline'"
+          aria-label="Toggle Loop"
+          @click="props.onToggleLoop"
+        >
+          <Icon
+            :name="
+              props.isLooping ? 'lucide:refresh-cw' : 'lucide:refresh-cw-off'
+            "
+            :mode="'svg'"
+          />
+        </Button>
+      </TooltipTrigger>
+
+      <TooltipContent side="bottom">
+        {{ props.isLooping ? 'Set Loop Off' : 'Set Loop On' }}
+      </TooltipContent>
+    </Tooltip>
   </div>
 </template>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import type { TimerPhase } from '../../../composables/useTimer';
 
 const props = defineProps<{
   progress: number;
   focusSeconds: number;
-  remainingRestSeconds: number;
+  restSeconds: number;
   phase: TimerPhase;
   size?: number;
   stroke?: number;
@@ -20,7 +20,7 @@ const formattedTime = computed(() => {
   if (props.phase === 'focus') {
     return formatTimeFromSeconds(props.focusSeconds);
   } else {
-    return formatTimeFromSeconds(props.remainingRestSeconds);
+    return formatTimeFromSeconds(props.restSeconds);
   }
 });
 
@@ -32,13 +32,17 @@ function formatTimeFromSeconds(seconds: number) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
-    <svg :width="size" :height="size" class="relative block">
+  <div class="grid place-items-center">
+    <svg
+      :width="size"
+      :height="size"
+      class="relative col-[1/2] row-[1/2] block"
+    >
       <circle
         :r="radius"
         :cx="size / 2"
         :cy="size / 2"
-        class="stroke-gray-200 dark:stroke-gray-700"
+        class="stroke-border"
         :stroke-width="stroke"
         fill="none"
       />
@@ -50,20 +54,21 @@ function formatTimeFromSeconds(seconds: number) {
         :stroke-width="stroke"
         fill="none"
         :stroke-dasharray="circumference"
-        :stroke-dashoffset="circumference * (1 - progress)"
+        :stroke-dashoffset="circumference * progress"
         stroke-linecap="round"
-        class="transition-all duration-300"
+        class="stroke-primary transition-all duration-300"
         style="transform: rotate(-90deg); transform-origin: 50% 50%"
       />
     </svg>
+
     <div
-      class="pointer-events-none absolute left-0 top-0 flex flex-col items-center justify-center"
+      class="pointer-events-none col-[1/2] row-[1/2] flex flex-col items-center justify-center"
       :style="{ width: size + 'px', height: size + 'px', top: 0, left: 0 }"
     >
-      <span class="text-4xl font-bold tabular-nums">{{ formattedTime }}</span>
-      <span class="mt-1 text-sm tracking-wide text-gray-500 dark:text-gray-400">
+      <span class="mb-1 tracking-wide">
         {{ phase === 'focus' ? 'focusing' : 'resting' }}
       </span>
+      <span class="text-4xl font-bold tabular-nums">{{ formattedTime }}</span>
     </div>
   </div>
 </template>
