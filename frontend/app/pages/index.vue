@@ -39,7 +39,7 @@ const toggleLoop = () => {
 </script>
 
 <template>
-  <section class="bg-background-light flex items-center justify-center">
+  <section class="flex h-full items-center justify-center">
     <Card class="min-w-1/2 w-[400px]">
       <CardHeader>
         <CardTitle class="sr-only">Timer</CardTitle>
