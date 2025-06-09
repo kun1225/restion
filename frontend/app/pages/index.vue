@@ -5,6 +5,14 @@ import {
   TimerControls,
   TimerSettings,
 } from '~/components/pages/index';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 const timer = useTimer();
 
@@ -31,42 +39,50 @@ const toggleLoop = () => {
 </script>
 
 <template>
-  <section
-    class="flex flex-col items-center justify-center bg-gradient-to-b from-sky-50 to-white dark:from-gray-900 dark:to-gray-800"
-  >
-    <div
-      class="flex w-full max-w-md flex-col items-center rounded-xl bg-white/80 p-6 shadow-lg dark:bg-gray-900/80"
-    >
-      <TimerCircle
-        :progress="progress"
-        :focus-duration="focusDuration"
-        :remaining-rest-duration="remainingRestDuration"
-        :phase="phase"
-        class="relative mb-4"
-      />
+  <section class="bg-background-light flex items-center justify-center">
+    <Card class="min-w-1/2 w-[400px]">
+      <CardHeader>
+        <CardTitle class="sr-only">Timer</CardTitle>
+        <CardDescription class="sr-only">
+          {{ focusDuration }} 分鐘專注，{{ restDuration }} 分鐘休息
+        </CardDescription>
+      </CardHeader>
 
-      <TimerControls
-        :is-running="isRunning"
-        :is-paused="isPaused"
-        :is-looping="isLooping"
-        :on-start="start"
-        :on-pause="pause"
-        :on-resume="resume"
-        :on-reset="reset"
-        :on-skip="skip"
-        :on-toggle-loop="toggleLoop"
-      />
+      <CardContent>
+        <TimerCircle
+          :progress="progress"
+          :focus-duration="focusDuration"
+          :remaining-rest-duration="remainingRestDuration"
+          :phase="phase"
+          class="relative mb-4"
+        />
 
-      <TimerSettings
-        :focus-duration="focusDuration"
-        :rest-ratio="restRatio"
-        @update:focus-duration="(val) => (focusDuration = val)"
-        @update:rest-ratio="(val) => (restRatio = val)"
-      />
-      <div class="mt-6 text-center text-xs text-gray-400">
-        <div>休息時間 = 專注時間 ÷ 比例</div>
-        <div>目前休息：{{ restDuration }} 分鐘</div>
-      </div>
-    </div>
+        <TimerControls
+          :is-running="isRunning"
+          :is-paused="isPaused"
+          :is-looping="isLooping"
+          :on-start="start"
+          :on-pause="pause"
+          :on-resume="resume"
+          :on-reset="reset"
+          :on-skip="skip"
+          :on-toggle-loop="toggleLoop"
+        />
+
+        <TimerSettings
+          :focus-duration="focusDuration"
+          :rest-ratio="restRatio"
+          @update:focus-duration="(val) => (focusDuration = val)"
+          @update:rest-ratio="(val) => (restRatio = val)"
+        />
+
+        <CardFooter>
+          <div class="mt-6 text-center text-xs text-gray-400">
+            <div>休息時間 = 專注時間 ÷ 比例</div>
+            <div>目前休息：{{ restDuration }} 分鐘</div>
+          </div>
+        </CardFooter>
+      </CardContent>
+    </Card>
   </section>
 </template>

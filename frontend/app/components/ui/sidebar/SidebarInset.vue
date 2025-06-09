@@ -12,9 +12,9 @@ const props = defineProps<{
     data-slot="sidebar-inset"
     :class="
       cn(
-        'bg-background min-h-[calc(100svh - var(--spacing) * 4)] relative flex w-full flex-1 flex-col overflow-hidden',
+        'bg-background min-h-[calc(100svh - var(--spacing) * 6)] relative flex w-full flex-1 flex-col overflow-hidden',
         '[&>*]:h-full',
-        'md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm',
+        'md:peer-data-[variant=inset]:m-3 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm',
         props.class,
       )
     "

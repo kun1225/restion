@@ -5,6 +5,7 @@
 
 :root {
   --background: oklch(0.9761 0 0);
+  --background-light: oklch(0.992 0 0);
   --foreground: oklch(0.3211 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.3211 0 0);
@@ -62,6 +63,7 @@
 
 .dark {
   --background: oklch(0.3211 0 0);
+  --background-light: oklch(0.3867 0 0);
   --foreground: oklch(1 0 0);
   --card: oklch(0.3867 0 0);
   --card-foreground: oklch(1 0 0);
@@ -119,6 +121,7 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-light: var(--background-light);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
