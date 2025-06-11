@@ -19,7 +19,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+  <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
     <!-- Start button - only show when not running -->
     <Tooltip>
       <TooltipTrigger as-child>
