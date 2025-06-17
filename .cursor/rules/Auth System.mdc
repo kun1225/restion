@@ -1,0 +1,259 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Restion JWT Authentication System
+
+## System Architecture
+
+### Token Types
+
+1. **Access Token**
+
+   - 短期有效（15分鐘）
+   - 用於 API 請求認證
+   - 包含用戶基本信息（id, type, jti）
+   - 存儲在前端記憶體中
+
+2. **Refresh Token**
+   - 長期有效（7天）
+   - 用於更新 access token
+   - 存儲在 HttpOnly Cookie 中
+   - 支援 token rotation
+
+### Security Features
+
+- ✅ **Token Rotation**: 每次刷新都會產生新的 refresh token
+- ✅ **Token Revocation**: 支援撤銷已發出的 tokens
+- ✅ **Blacklist 檢查**: 檢查 access token 是否在黑名單中
+- ✅ **HttpOnly Cookies**: Refresh token 存在安全 cookie 中
+- ✅ **定期清理**: 自動清理過期的 token 記錄
+
+## Database Architecture
+
+### refresh_tokens table
+
+```sql
+CREATE TABLE refresh_tokens (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  token_hash VARCHAR(255) NOT NULL UNIQUE,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  revoked_at TIMESTAMP NULL,
+  device_info JSONB
+);
+```
+
+### revoked_tokens table
+
+```sql
+CREATE TABLE revoked_tokens (
+  id SERIAL PRIMARY KEY,
+  jti VARCHAR(255) NOT NULL UNIQUE,
+  user_id INTEGER REFERENCES users(id),
+  revoked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expires_at TIMESTAMP NOT NULL
+);
+```
+
+## API Endpoints
+
+### Public endpoints (no authentication)
+
+| 方法 | 端點                 | 描述              |
+| ---- | -------------------- | ----------------- |
+| POST | `/api/auth/register` | 註冊新用戶        |
+| POST | `/api/auth/login`    | 用戶登入          |
+| POST | `/api/auth/refresh`  | 刷新 access token |
+
+### Protected endpoints (authentication required)
+
+| 方法 | 端點                   | 描述                    |
+| ---- | ---------------------- | ----------------------- |
+| GET  | `/api/auth/me`         | 獲取當前用戶信息        |
+| POST | `/api/auth/logout`     | 登出（撤銷當前 tokens） |
+| POST | `/api/auth/logout-all` | 登出所有設備            |
+
+## Authentication Flow
+
+### 1. Register/Login
+
+```javascript
+// frontend request
+POST /api/auth/login
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+// backend response
+{
+  "success": true,
+  "data": {
+    "user": { ... },
+    "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+  }
+}
+
+// set HttpOnly Cookie
+Set-Cookie: refresh_token=abc123...; HttpOnly; Secure; SameSite=Strict
+```
+
+### 2. Use Access Token
+
+```javascript
+// frontend request
+GET /api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+
+### 3. Refresh Token
+
+```javascript
+// frontend request (auto send refresh token cookie)
+POST /api/auth/refresh
+
+// backend response
+{
+  "success": true,
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+  }
+}
+
+// set new refresh token cookie
+```
+
+### 4. Logout
+
+```javascript
+// frontend request
+POST /api/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+
+// backend action:
+// 1. revoke access token (add to blacklist)
+// 2. revoke refresh token
+// 3. clear cookie
+```
+
+## Middleware
+
+### authenticateToken
+
+驗證 access token 的中間件：
+
+1. 提取 Bearer token
+2. 驗證 JWT 簽名和過期時間
+3. 檢查 token 是否在黑名單中
+4. 驗證用戶是否存在
+5. 將用戶信息附加到 request 對象
+
+```javascript
+// usage
+router.get('/protected', authenticateToken, handler);
+```
+
+## Auto Cleanup
+
+系統每小時自動清理：
+
+- 過期的 revoked tokens
+- 過期的 refresh tokens
+- 被撤銷且已過期的 refresh tokens
+
+## Environment Variables
+
+```bash
+# JWT secret
+ACCESS_TOKEN_SECRET=your_super_secret_access_token_key
+REFRESH_TOKEN_SECRET=your_super_secret_refresh_token_key
+
+# frontend URL (CORS)
+FRONTEND_URL=http://localhost:3000
+
+# server config
+PORT=3001
+NODE_ENV=development
+```
+
+## Test
+
+運行包含的測試腳本：
+
+```bash
+# 啟動伺服器
+npm run dev
+
+# 在另一個終端運行測試
+node test-auth.js
+```
+
+測試覆蓋：
+
+- 用戶註冊
+- 用戶登入
+- 獲取用戶信息
+- Token 撤銷驗證
+- 登出功能
+
+## 🚨 錯誤處理
+
+系統定義了完整的錯誤代碼：
+
+- `NO_TOKEN`: 缺少 token
+- `TOKEN_EXPIRED`: Token 已過期
+- `TOKEN_REVOKED`: Token 已被撤銷
+- `INVALID_TOKEN`: 無效的 token
+- `USER_NOT_FOUND`: 用戶不存在
+- `INVALID_REFRESH_TOKEN`: 無效的 refresh token
+- `INVALID_CREDENTIALS`: 登入憑證錯誤
+
+## 📈 監控和統計
+
+可以使用 `getTokenStats()` 函數獲取 token 統計信息：
+
+```javascript
+import { getTokenStats } from './utils/cleanup';
+
+const stats = await getTokenStats();
+console.log(stats);
+// {
+//   totalRefreshTokens: 150,
+//   expiredRefreshTokens: 20,
+//   revokedRefreshTokens: 5,
+//   totalRevokedAccessTokens: 30,
+//   expiredRevokedAccessTokens: 10
+// }
+```
+
+## Best Practices
+
+1. **前端 Token 管理**：
+
+   - Access token 存在記憶體中（狀態管理）
+   - 設置自動刷新機制
+   - 401 錯誤時自動重定向到登入頁
+
+2. **安全考慮**：
+
+   - 使用 HTTPS（生產環境）
+   - 定期輪換 JWT 密鑰
+   - 監控異常登入活動
+   - 實施速率限制
+
+3. **效能優化**：
+   - Redis 快取用戶信息
+   - 批量清理過期記錄
+   - 資料庫索引優化
+
+## Upgrade and Migration
+
+如果從舊的 JWT 系統遷移：
+
+1. 保留舊的 `JWT_SECRET` 設定向後相容
+2. 逐步將用戶遷移到新系統
+3. 監控雙系統運行狀況
+4. 最終移除舊系統代碼
