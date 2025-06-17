@@ -50,10 +50,8 @@ export async function registerController(
       password_hash: hashedPassword,
     });
 
-    // 生成 tokens
     const { accessToken, refreshToken } = await generateTokens(user.id);
 
-    // 設置 httpOnly cookie 存儲 refresh token
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -173,13 +171,10 @@ export async function refreshTokenController(
       return;
     }
 
-    // 驗證 refresh token
     const { userId, tokenHash } = await verifyRefreshToken(refreshToken);
 
-    // 撤銷舊的 refresh token (token rotation)
     await revokeRefreshToken(tokenHash);
 
-    // 生成新的 tokens
     const deviceInfo = {
       userAgent: req.headers['user-agent'],
       ip: req.ip,
@@ -189,7 +184,6 @@ export async function refreshTokenController(
       deviceInfo,
     );
 
-    // 設置新的 refresh token cookie
     res.cookie('refresh_token', newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -317,7 +311,6 @@ export async function getMeController(
       return;
     }
 
-    // 從資料庫獲取最新的用戶信息
     const user = await findById(req.user.id);
     if (!user) {
       res.status(404).json({
