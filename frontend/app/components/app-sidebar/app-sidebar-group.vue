@@ -57,10 +57,7 @@ const { open } = useSidebar();
           </Collapsible>
 
           <SidebarMenuItem v-else>
-            <SidebarMenuButton
-              as-child
-              :tooltip="open ? undefined : item.title"
-            >
+            <SidebarMenuButton as-child :tooltip="item.title">
               <NuxtLink :to="item.url">
                 <component :is="item.icon" />
                 <AppSidebarButtonLabel :label="item.title" />

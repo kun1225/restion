@@ -6,7 +6,7 @@ const props = defineProps<{
 
 <template>
   <span
-    class="visible transition-[opacity,visibility] group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
+    class="visible opacity-100 transition duration-300 group-data-[collapsible=icon]:opacity-0"
     >{{ props.label }}</span
   >
 </template>
