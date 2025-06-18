@@ -63,7 +63,7 @@ const otherItems = [
     <!-- Header -->
     <SidebarHeader class="relative">
       <SidebarMenuButton
-        class="w-fit text-lg transition-all group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
+        class="group-data-[collapsible=icon]:blur-xs w-fit text-lg blur-none transition-all ease-linear group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
       >
         R
       </SidebarMenuButton>
