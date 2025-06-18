@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import AppSidebarGroup from './app-sidebar-group.vue';
+import AppSidebarFooter from './app-sidebar-footer.vue';
 
 const mainItems = [
   {
@@ -87,11 +88,9 @@ const otherItems = [
     </SidebarContent>
 
     <!-- Footer -->
-    <SidebarFooter
-      class="text-muted-foreground whitespace-nowrap text-xs transition-all group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
-    >
+    <SidebarFooter>
       <SidebarSeparator />
-      <p class="p-2">Restion v1.0.0</p>
+      <AppSidebarFooter />
     </SidebarFooter>
   </Sidebar>
 </template>

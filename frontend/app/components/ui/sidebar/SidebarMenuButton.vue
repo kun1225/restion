@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Component } from 'vue';
+import { type Component } from 'vue';
 import { reactiveOmit } from '@vueuse/core';
 import {
   Tooltip,
