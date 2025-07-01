@@ -1,43 +1,65 @@
 import { defineStore } from 'pinia';
 
 type User = {
-  name: string;
+  id: number;
+  username: string;
   email: string;
+  created_at: string;
   avatarUrl?: string;
 };
 
 type AuthState = {
-  isLoggedIn: boolean;
   user: User | null;
+  accessToken: string | null;
 };
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
-    isLoggedIn: false,
     user: null,
+    accessToken: null,
   }),
+
   getters: {
-    userName: (state) => state.user?.name,
-    userInitial: (state) => state.user?.name.charAt(0).toUpperCase() ?? '',
+    isLoggedIn: (state) => !!state.user,
+    userName: (state) => state.user?.username,
+    userInitial: (state) => state.user?.username.charAt(0).toUpperCase() ?? '',
   },
+
   actions: {
-    login() {
-      this.isLoggedIn = true;
-      this.user = {
-        name: 'Kun',
-        email: 'kun@example.com',
-        avatarUrl: 'https://github.com/shadcn.png',
-      };
+    async login(credentials: { email: string; password: string }) {
+      // TODO: Don't use any type
+      const { user, accessToken } = await $fetch<any>('/api/auth/login', {
+        method: 'POST',
+        body: credentials,
+      });
+      this.user = user;
+      this.accessToken = accessToken;
     },
-    logout() {
-      this.isLoggedIn = false;
+
+    async register(data: { email: string; password: string }) {
+      // TODO: Don't use any type
+      const { user, accessToken } = await $fetch<any>('/api/auth/register', {
+        method: 'POST',
+        body: data,
+      });
+      this.user = user;
+      this.accessToken = accessToken;
+    },
+
+    async logout() {
+      await $fetch('/api/auth/logout', { method: 'POST' });
       this.user = null;
+      this.accessToken = null;
     },
-    toggleLogin() {
-      if (this.isLoggedIn) {
-        this.logout();
-      } else {
-        this.login();
+
+    async fetchUser() {
+      if (this.user) return;
+      try {
+        const { user } = await $fetch<any>('/api/auth/me');
+        this.user = user;
+      } catch (error) {
+        this.user = null;
+        this.accessToken = null;
       }
     },
   },

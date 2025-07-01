@@ -14,7 +14,9 @@ import { ERROR_CODES } from '../types/apiResponse';
 
 export async function registerController(
   req: Request,
-  res: Response<ApiResponse<{ user: User; accessToken: string }>>,
+  res: Response<
+    ApiResponse<{ user: User; accessToken: string; refreshToken: string }>
+  >,
 ) {
   try {
     const { email, password } = req.body;
@@ -52,17 +54,10 @@ export async function registerController(
 
     const { accessToken, refreshToken } = await generateTokens(user.id);
 
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
     res.status(201).json({
       success: true,
       message: 'User registered',
-      data: { user, accessToken },
+      data: { user, accessToken, refreshToken },
     });
   } catch (error) {
     console.error(error);
@@ -70,7 +65,9 @@ export async function registerController(
       success: false,
       error: {
         code: ERROR_CODES.INTERNAL_SERVER_ERROR,
-        message: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: `Internal server error: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`,
       },
     });
   }
@@ -78,7 +75,9 @@ export async function registerController(
 
 export async function loginController(
   req: Request,
-  res: Response<ApiResponse<{ user: User; accessToken: string }>>,
+  res: Response<
+    ApiResponse<{ user: User; accessToken: string; refreshToken: string }>
+  >,
 ) {
   try {
     const { email, password } = req.body;
@@ -128,18 +127,10 @@ export async function loginController(
       deviceInfo,
     );
 
-    // 設置 httpOnly cookie
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 天
-    });
-
     res.json({
       success: true,
       message: 'Login successful',
-      data: { user, accessToken },
+      data: { user, accessToken, refreshToken },
     });
   } catch (error) {
     console.error(error);
@@ -155,10 +146,10 @@ export async function loginController(
 
 export async function refreshTokenController(
   req: Request,
-  res: Response<ApiResponse<{ accessToken: string }>>,
+  res: Response<ApiResponse<{ accessToken: string; refreshToken: string }>>,
 ) {
   try {
-    const refreshToken = req.cookies.refresh_token;
+    const { refreshToken } = req.body;
 
     if (!refreshToken) {
       res.status(401).json({
@@ -179,22 +170,13 @@ export async function refreshTokenController(
       userAgent: req.headers['user-agent'],
       ip: req.ip,
     };
-    const { accessToken, refreshToken: newRefreshToken } = await generateTokens(
-      userId,
-      deviceInfo,
-    );
-
-    res.cookie('refresh_token', newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 天
-    });
+    const { accessToken, refreshToken: newRefreshToken } =
+      await generateTokens(userId, deviceInfo);
 
     res.json({
       success: true,
       message: 'Tokens refreshed',
-      data: { accessToken },
+      data: { accessToken, refreshToken: newRefreshToken },
     });
   } catch (error) {
     console.error(error);
@@ -213,7 +195,7 @@ export async function logoutController(
   res: Response<ApiResponse<{ message: string }>>,
 ) {
   try {
-    const refreshToken = req.cookies.refresh_token;
+    const { refreshToken } = req.body;
 
     // 如果有 access token，撤銷它
     if (req.user && req.tokenId) {
@@ -230,9 +212,6 @@ export async function logoutController(
         console.log('Refresh token already invalid:', error);
       }
     }
-
-    // 清除 cookie
-    res.clearCookie('refresh_token');
 
     res.json({
       success: true,
@@ -274,9 +253,6 @@ export async function logoutAllController(
     if (req.tokenId) {
       await revokeAccessToken(req.tokenId, req.user.id);
     }
-
-    // 清除 cookie
-    res.clearCookie('refresh_token');
 
     res.json({
       success: true,

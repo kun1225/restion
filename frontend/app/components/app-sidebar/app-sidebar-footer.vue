@@ -71,13 +71,15 @@ const authStore = useAuthStore();
   </template>
 
   <template v-else>
-    <SidebarMenuButton @click="authStore.login">
-      <Icon name="lucide:log-in" class="size-6" mode="svg" />
-      <span
-        class="group-data-[collapsible=icon]:blur-xs whitespace-nowrap transition-all ease-linear group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
-      >
-        登入 / 註冊
-      </span>
+    <SidebarMenuButton as-child>
+      <NuxtLink to="/login">
+        <Icon name="lucide:log-in" class="size-6" mode="svg" />
+        <span
+          class="group-data-[collapsible=icon]:blur-xs whitespace-nowrap transition-all ease-linear group-data-[collapsible=icon]:invisible group-data-[collapsible=icon]:opacity-0"
+        >
+          登入 / 註冊
+        </span>
+      </NuxtLink>
     </SidebarMenuButton>
   </template>
 </template>

@@ -27,4 +27,9 @@ export default defineNuxtConfig({
     prefix: '',
     componentDir: './app/components/ui',
   },
+  runtimeConfig: {
+    public: {
+      backendUrl: process.env.BACKEND_URL || 'http://localhost:3001',
+    },
+  },
 });
