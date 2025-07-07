@@ -28,21 +28,37 @@ const router = useRouter();
 
 const loginSchema = toTypedSchema(
   z.object({
-    email: z.string().email('請輸入正確的電子郵件'),
-    password: z.string().min(8, '密碼至少需要8個字元'),
+    email: z
+      .string({ required_error: '請輸入電子郵件' })
+      .email('請輸入正確的電子郵件'),
+    password: z
+      .string({ required_error: '請輸入密碼' })
+      .min(8, '密碼至少需要8個字元'),
   }),
 );
 
-const loginForm = useForm({
+const { handleSubmit, setErrors, isSubmitting, defineField } = useForm({
   validationSchema: loginSchema,
 });
 
-const onLoginSubmit = loginForm.handleSubmit(async (values) => {
+const [email, emailProps] = defineField('email', {
+  validateOnBlur: false,
+  validateOnChange: false,
+  validateOnModelUpdate: false,
+});
+
+const [password, passwordProps] = defineField('password', {
+  validateOnBlur: false,
+  validateOnChange: false,
+  validateOnModelUpdate: false,
+});
+
+const onLoginSubmit = handleSubmit(async (values) => {
   try {
     await authStore.login(values);
     router.push('/');
   } catch (error: any) {
-    loginForm.setErrors({ email: error.data?.message || '登入失敗' });
+    setErrors({ email: error.data?.message || '登入失敗' });
   }
 });
 </script>
@@ -55,29 +71,31 @@ const onLoginSubmit = loginForm.handleSubmit(async (values) => {
         <CardDescription class="text-sm">請輸入你的帳號密碼</CardDescription>
       </CardHeader>
       <CardContent>
-        <form @submit="onLoginSubmit" class="space-y-8">
-          <FormField v-slot="{ componentField }" name="email">
+        <form @submit="onLoginSubmit" class="space-y-6">
+          <FormField name="email">
             <FormItem>
               <FormLabel>電子郵件</FormLabel>
               <FormControl>
                 <Input
                   type="email"
                   placeholder="example@mail.com"
-                  v-bind="componentField"
+                  v-bind="emailProps"
+                  v-model="email"
                   autocomplete="email"
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           </FormField>
-          <FormField v-slot="{ componentField }" name="password">
+          <FormField name="password">
             <FormItem>
               <FormLabel>密碼</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   placeholder="password"
-                  v-bind="componentField"
+                  v-model="password"
+                  v-bind="passwordProps"
                 />
               </FormControl>
               <FormMessage />
@@ -87,9 +105,9 @@ const onLoginSubmit = loginForm.handleSubmit(async (values) => {
             type="submit"
             class="w-full"
             size="lg"
-            :disabled="loginForm.isSubmitting.value"
+            :disabled="isSubmitting"
           >
-            {{ loginForm.isSubmitting.value ? '登入中...' : '登入' }}
+            {{ isSubmitting ? '登入中...' : '登入' }}
           </Button>
         </form>
       </CardContent>
