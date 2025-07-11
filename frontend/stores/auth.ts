@@ -26,7 +26,10 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(credentials: { email: string; password: string }) {
+    async login(
+      credentials: { email: string; password: string },
+      rememberMe?: boolean,
+    ) {
       // TODO: Don't use any type
       const { user, accessToken } = await $fetch<any>('/api/auth/login', {
         method: 'POST',
@@ -34,6 +37,13 @@ export const useAuthStore = defineStore('auth', {
       });
       this.user = user;
       this.accessToken = accessToken;
+      if (rememberMe) {
+        localStorage.setItem('restion_user', JSON.stringify(user));
+        localStorage.setItem('restion_accessToken', accessToken);
+      } else {
+        localStorage.removeItem('restion_user');
+        localStorage.removeItem('restion_accessToken');
+      }
     },
 
     async register(data: { email: string; password: string }) {
@@ -50,6 +60,8 @@ export const useAuthStore = defineStore('auth', {
       await $fetch('/api/auth/logout', { method: 'POST' });
       this.user = null;
       this.accessToken = null;
+      localStorage.removeItem('restion_user');
+      localStorage.removeItem('restion_accessToken');
     },
 
     async fetchUser() {
@@ -60,6 +72,15 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         this.user = null;
         this.accessToken = null;
+      }
+    },
+
+    loadFromLocalStorage() {
+      const user = localStorage.getItem('restion_user');
+      const accessToken = localStorage.getItem('restion_accessToken');
+      if (user && accessToken) {
+        this.user = JSON.parse(user);
+        this.accessToken = accessToken;
       }
     },
   },

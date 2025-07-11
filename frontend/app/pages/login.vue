@@ -2,6 +2,7 @@
 import { z } from 'zod';
 import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
+import { ref } from 'vue';
 
 import { useAuthStore } from '~~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -14,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
   FormControl,
   FormField,
@@ -22,6 +22,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -53,9 +56,14 @@ const [password, passwordProps] = defineField('password', {
   validateOnModelUpdate: false,
 });
 
+const rememberMe = ref(false);
+
 const onLoginSubmit = handleSubmit(async (values) => {
   try {
-    await authStore.login(values);
+    await authStore.login(
+      { email: values.email, password: values.password },
+      rememberMe.value,
+    );
     router.push('/');
   } catch (error: any) {
     setErrors({ email: error.data?.message || '登入失敗' });
@@ -101,6 +109,17 @@ const onLoginSubmit = handleSubmit(async (values) => {
               <FormMessage />
             </FormItem>
           </FormField>
+          <div class="flex items-center">
+            <Checkbox
+              id="rememberMe"
+              type="checkbox"
+              v-model="rememberMe"
+              class="form-checkbox text-primary focus:ring-primary h-4 w-4 rounded border-gray-300"
+            />
+            <Label for="rememberMe" class="text-muted-foreground pl-2"
+              >記住密碼</Label
+            >
+          </div>
           <Button
             type="submit"
             class="w-full"
