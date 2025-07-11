@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
+
 import IndexPage from '~/pages/index.vue';
 
 // Mock useIntervalFn

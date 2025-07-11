@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import AppSidebarButtonLabel from './app-sidebar-button-label.vue';
+
+import type { AppSidebarGroup } from '~~/types/type-app-sidebar';
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -10,11 +14,9 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarMenuSubItem, useSidebar 
 } from '@/components/ui/sidebar';
-import AppSidebarButtonLabel from './app-sidebar-button-label.vue';
-import type { AppSidebarGroup } from '~~/types/type-app-sidebar';
-import { useSidebar } from '@/components/ui/sidebar';
+
 
 const props = defineProps<AppSidebarGroup>();
 const { title, items } = toRefs(props);

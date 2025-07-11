@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { type Component } from 'vue';
 import { reactiveOmit } from '@vueuse/core';
+
+
+
+import SidebarMenuButtonChild, {
+  type SidebarMenuButtonProps,
+} from './SidebarMenuButtonChild.vue';
+import { useSidebar } from './utils';
+
+import type { Component } from 'vue';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import SidebarMenuButtonChild, {
-  type SidebarMenuButtonProps,
-} from './SidebarMenuButtonChild.vue';
-import { useSidebar } from './utils';
 
 defineOptions({
   inheritAttrs: false,
@@ -55,7 +60,7 @@ const delegatedProps = reactiveOmit(props, 'tooltip');
       <template v-if="typeof tooltip === 'string'">
         {{ tooltip }}
       </template>
-      <component v-else :is="tooltip" />
+      <component :is="tooltip" v-else />
     </TooltipContent>
   </Tooltip>
 </template>

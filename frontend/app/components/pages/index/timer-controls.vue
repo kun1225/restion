@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Button } from '~/components/ui/button';
 import type { TimerPhase } from '~/composables/useTimer';
+
+import { Button } from '~/components/ui/button';
 import {
   Tooltip,
   TooltipContent,

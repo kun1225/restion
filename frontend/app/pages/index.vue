@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { useTimer } from '@/composables/useTimer';
-import {
-  TimerCircle,
-  TimerControls,
-  TimerSettings,
-} from '~/components/pages/index';
 import {
   Card,
   CardContent,
@@ -13,6 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useTimer } from '@/composables/useTimer';
+import {
+  TimerCircle,
+  TimerControls,
+  TimerSettings,
+} from '~/components/pages/index';
 
 definePageMeta({
   keepalive: true,

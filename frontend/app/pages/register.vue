@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-
-import { useAuthStore } from '~~/stores/auth';
 import { useRouter } from 'vue-router';
+import { z } from 'zod';
 
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -22,7 +21,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -35,7 +34,7 @@ const registerSchema = toTypedSchema(
       confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
+      message: 'Passwords don\'t match',
       path: ['confirmPassword'],
     }),
 );
@@ -63,7 +62,7 @@ const onRegisterSubmit = registerForm.handleSubmit(async (values) => {
       <CardDescription>Create a new account.</CardDescription>
     </CardHeader>
     <CardContent>
-      <form @submit="onRegisterSubmit" class="space-y-4">
+      <form class="space-y-4" @submit="onRegisterSubmit">
         <FormField v-slot="{ componentField }" name="email">
           <FormItem>
             <FormLabel>Email</FormLabel>

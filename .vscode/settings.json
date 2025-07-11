@@ -4,4 +4,17 @@
   "cSpell.words": [
     "restion"
   ],
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "vue"
+  ],
+  "eslint.workingDirectories": [
+    "./frontend",
+    "./backend"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
 }

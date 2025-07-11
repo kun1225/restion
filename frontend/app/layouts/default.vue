@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SidebarProvider, SidebarInset } from '~/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar/app-sidebar.vue';
+import { SidebarInset, SidebarProvider } from '~/components/ui/sidebar';
 </script>
 
 <template>

@@ -28,7 +28,7 @@ const onRestInput = (e: Event) => {
           :value="restRatio"
           class="w-full accent-green-400"
           @input="onRestInput($event)"
-        />
+        >
         <input
           type="number"
           min="1"
@@ -36,7 +36,7 @@ const onRestInput = (e: Event) => {
           :value="restRatio"
           class="w-16 rounded border px-2 py-1 text-center dark:border-gray-600 dark:bg-gray-800"
           @input="onRestInput($event)"
-        />
+        >
       </div>
     </div>
   </div>

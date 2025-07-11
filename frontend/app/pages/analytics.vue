@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Timer, CheckCircle, TrendingUp } from 'lucide-vue-next';
+import { CheckCircle, Timer, TrendingUp } from 'lucide-vue-next';
 
 // 頁面標題設定
 useHead({

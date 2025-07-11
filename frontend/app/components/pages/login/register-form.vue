@@ -3,18 +3,18 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 </script>
 
 <template>
@@ -24,7 +24,7 @@ import {
       <CardDescription>Create a new account.</CardDescription>
     </CardHeader>
     <CardContent>
-      <form @submit="onRegisterSubmit" class="space-y-4">
+      <form class="space-y-4" @submit="onRegisterSubmit">
         <FormField v-slot="{ componentField }" name="email">
           <FormItem>
             <FormLabel>Email</FormLabel>

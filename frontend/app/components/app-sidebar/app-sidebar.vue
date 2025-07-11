@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import {
-  Timer,
-  Settings,
-  Music,
   BarChart3,
-  Users,
   HelpCircle,
+  Music,
+  Settings,
+  Timer,
+  Users,
 } from 'lucide-vue-next';
+
+import AppSidebarFooter from './app-sidebar-footer.vue';
+import AppSidebarGroup from './app-sidebar-group.vue';
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,8 +20,6 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import AppSidebarGroup from './app-sidebar-group.vue';
-import AppSidebarFooter from './app-sidebar-footer.vue';
 
 const mainItems = [
   {

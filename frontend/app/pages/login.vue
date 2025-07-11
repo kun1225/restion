@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { z } from 'zod';
-import { useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
 import { ref } from 'vue';
-
-import { useAuthStore } from '~~/stores/auth';
 import { useRouter } from 'vue-router';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   FormControl,
   FormField,
@@ -23,8 +22,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -65,8 +64,8 @@ const onLoginSubmit = handleSubmit(async (values) => {
       rememberMe.value,
     );
     router.push('/');
-  } catch (error: any) {
-    setErrors({ email: error.data?.message || '登入失敗' });
+  } catch (error: unknown) {
+    setErrors({ email: error instanceof Error ? error.message : '登入失敗' });
   }
 });
 </script>
@@ -79,16 +78,16 @@ const onLoginSubmit = handleSubmit(async (values) => {
         <CardDescription class="text-sm">請輸入你的帳號密碼</CardDescription>
       </CardHeader>
       <CardContent>
-        <form @submit="onLoginSubmit" class="space-y-6">
+        <form class="space-y-6" @submit="onLoginSubmit">
           <FormField name="email">
             <FormItem>
               <FormLabel>電子郵件</FormLabel>
               <FormControl>
                 <Input
-                  type="email"
-                  placeholder="example@mail.com"
                   v-bind="emailProps"
                   v-model="email"
+                  type="email"
+                  placeholder="example@mail.com"
                   autocomplete="email"
                 />
               </FormControl>
@@ -100,9 +99,9 @@ const onLoginSubmit = handleSubmit(async (values) => {
               <FormLabel>密碼</FormLabel>
               <FormControl>
                 <Input
+                  v-model="password"
                   type="password"
                   placeholder="password"
-                  v-model="password"
                   v-bind="passwordProps"
                 />
               </FormControl>
@@ -112,8 +111,8 @@ const onLoginSubmit = handleSubmit(async (values) => {
           <div class="flex items-center">
             <Checkbox
               id="rememberMe"
-              type="checkbox"
               v-model="rememberMe"
+              type="checkbox"
               class="form-checkbox text-primary focus:ring-primary h-4 w-4 rounded border-gray-300"
             />
             <Label for="rememberMe" class="text-muted-foreground pl-2"

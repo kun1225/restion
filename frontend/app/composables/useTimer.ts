@@ -1,5 +1,5 @@
-import { ref, computed, watch, onUnmounted } from 'vue';
 import { useIntervalFn } from '@vueuse/core';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 export type TimerPhase = 'focus' | 'rest';
 
