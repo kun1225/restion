@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
@@ -128,6 +129,15 @@ const onLoginSubmit = handleSubmit(async (values) => {
             {{ isSubmitting ? '登入中...' : '登入' }}
           </Button>
         </form>
+
+        <Separator class="my-6">Or</Separator>
+
+        <div class="flex items-center justify-center">
+          <p class="text-muted-foreground text-sm">
+            還沒有帳號嗎？
+            <NuxtLink to="/register" class="text-primary">註冊</NuxtLink>
+          </p>
+        </div>
       </CardContent>
     </Card>
   </div>

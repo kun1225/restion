@@ -7,7 +7,6 @@ import type { HTMLAttributes } from 'vue';
 
 import { cn } from '~/lib/utils';
 
-
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant'];
   size?: ButtonVariants['size'];
@@ -19,6 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
   as: 'button',
   variant: 'default',
   size: 'default',
+  tooltip: undefined,
   class: '',
 });
 </script>
