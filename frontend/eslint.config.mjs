@@ -7,7 +7,6 @@ export default withNuxt({
     'no-unused-vars': 'warn',
     eqeqeq: 'error',
     semi: ['error', 'always'],
-    quotes: ['error', 'single'],
     'vue/no-mutating-props': 'error',
     '@typescript-eslint/explicit-function-return-type': 'warn',
     'import/order': [

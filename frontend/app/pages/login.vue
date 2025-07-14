@@ -135,7 +135,9 @@ const onLoginSubmit = handleSubmit(async (values) => {
         <div class="flex items-center justify-center">
           <p class="text-muted-foreground text-sm">
             還沒有帳號嗎？
-            <NuxtLink to="/register" class="text-primary">註冊</NuxtLink>
+            <Button variant="link" size="link" as-child>
+              <NuxtLink to="/register">註冊</NuxtLink>
+            </Button>
           </p>
         </div>
       </CardContent>
