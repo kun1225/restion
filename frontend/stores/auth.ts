@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import type { User } from '~~/types/user';
+import type { User } from '@restion/shared';
 
 type AuthState = {
   user: User | null;

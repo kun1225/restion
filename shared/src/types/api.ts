@@ -1,4 +1,4 @@
-export type ApiResponse<T = any> =
+export type ApiResponse<T> =
   | {
       success: true;
       message?: string;
@@ -25,7 +25,7 @@ export const ERROR_CODES = {
   INVALID_REFRESH_TOKEN: 'INVALID_REFRESH_TOKEN',
 } as const;
 
-type ErrorCode = keyof typeof ERROR_CODES;
+export type ErrorCode = keyof typeof ERROR_CODES;
 
 export const ERROR_MESSAGES = {
   [ERROR_CODES.MISSING_FIELDS]: 'Missing required fields',
@@ -40,4 +40,4 @@ export const ERROR_MESSAGES = {
   [ERROR_CODES.INVALID_REFRESH_TOKEN]: 'Invalid refresh token',
 } as const;
 
-type ErrorMessage = (typeof ERROR_MESSAGES)[ErrorCode];
+export type ErrorMessage = (typeof ERROR_MESSAGES)[ErrorCode];

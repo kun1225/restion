@@ -1,0 +1,21 @@
+{
+  "name": "@restion/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Shared types and configurations for Restion frontend and backend",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.27.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+} 

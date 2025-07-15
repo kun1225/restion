@@ -1,10 +1,4 @@
-import type { User } from '~~/types/user';
-
-type RegisterResponse = {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
-};
+import type { ApiResponse, RegisterResponse } from '@restion/shared';
 
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
@@ -19,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
 
   try {
-    const response = await $fetch<RegisterResponse>(
+    const response = await $fetch<ApiResponse<RegisterResponse>>(
       `${runtimeConfig.public.backendUrl}/api/auth/register`,
       {
         method: 'POST',
@@ -27,16 +21,23 @@ export default defineEventHandler(async (event) => {
       },
     );
 
-    const { user, accessToken, refreshToken } = response.data;
+    if (response.success) {
+      const { user, accessToken, refreshToken } = response.data!;
 
-    setCookie(event, 'refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      setCookie(event, 'refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      return { user, accessToken };
+    }
+
+    throw createError({
+      statusCode: 400,
+      statusMessage: response.error.message,
     });
-
-    return { user, accessToken };
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw createError({

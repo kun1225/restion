@@ -44,7 +44,7 @@ const testSuites = [
 ];
 
 let passedTests = 0;
-let totalTests = testSuites.length;
+const totalTests = testSuites.length;
 
 for (const suite of testSuites) {
   console.log(colors.cyan(`\n📖 ${suite.name}`));

@@ -1,18 +1,6 @@
 <script setup lang="ts">
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { useTimer } from '@/composables/useTimer';
-import {
-  TimerCircle,
-  TimerControls,
-  TimerSettings,
-} from '~/components/pages/index';
+import { TimerCircle, TimerControls } from '../components/pages/index';
+import { useTimer } from '../composables/useTimer';
 
 definePageMeta({
   keepalive: true,
@@ -21,7 +9,6 @@ definePageMeta({
 const timer = useTimer();
 
 const {
-  restRatio,
   isLooping,
   phase,
   isPaused,

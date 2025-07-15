@@ -7,8 +7,15 @@ export default withNuxt({
     'no-unused-vars': 'warn',
     eqeqeq: 'error',
     semi: ['error', 'always'],
+    'prefer-const': 'error',
+    'no-var': 'error',
+
+    // Vue-specific rules
     'vue/no-mutating-props': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+    'vue/component-definition-name-casing': ['error', 'PascalCase'],
+
+    // Import organization
     'import/order': [
       'error',
       {
@@ -26,5 +33,8 @@ export default withNuxt({
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
+
+    complexity: ['warn', 10],
+    'no-magic-numbers': ['warn', { ignore: [-1, 0, 1] }],
   },
 });

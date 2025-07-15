@@ -1,5 +1,18 @@
-export { type ApiResponse } from './apiResponse';
-export { type User } from './user';
+// Re-export shared types for convenience
+export type {
+  ApiResponse,
+  User,
+  UserCreateInput,
+  UserUpdateInput,
+  UserResponse,
+  ERROR_CODES,
+  ERROR_MESSAGES,
+  ErrorCode,
+  ErrorMessage,
+  TimerStatus,
+  TimerConfig,
+  TimerSession,
+} from '@restion/shared';
 
 export interface FocusSession {
   id: number;

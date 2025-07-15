@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Separator } from '~/components/ui/separator';
+import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();

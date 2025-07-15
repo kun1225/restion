@@ -9,8 +9,8 @@ import {
   revokeAccessToken,
   revokeAllUserTokens,
 } from '../utils/jwt';
-import type { ApiResponse, User } from '../types';
-import { ERROR_CODES } from '../types/apiResponse';
+import type { ApiResponse, User } from '@restion/shared';
+import { ERROR_CODES } from '@restion/shared';
 
 export async function registerController(
   req: Request,
@@ -170,8 +170,10 @@ export async function refreshTokenController(
       userAgent: req.headers['user-agent'],
       ip: req.ip,
     };
-    const { accessToken, refreshToken: newRefreshToken } =
-      await generateTokens(userId, deviceInfo);
+    const { accessToken, refreshToken: newRefreshToken } = await generateTokens(
+      userId,
+      deviceInfo,
+    );
 
     res.json({
       success: true,

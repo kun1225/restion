@@ -1,12 +1,14 @@
-import { User } from '../types';
+import type { User } from '@restion/shared';
 import { db } from '../utils/db';
 
 export async function findByEmail(email: string): Promise<User | undefined> {
-  return db<User>('users').where({ email }).first();
+  const result = await db<User>('users').where({ email }).first();
+  return result;
 }
 
 export async function findById(id: number): Promise<User | undefined> {
-  return db<User>('users').where({ id }).first();
+  const result = await db<User>('users').where({ id }).first();
+  return result;
 }
 
 export async function createUser(user: Partial<User>): Promise<User> {
