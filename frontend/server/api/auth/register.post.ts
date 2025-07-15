@@ -1,3 +1,11 @@
+import type { User } from '~~/types/user';
+
+type RegisterResponse = {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
+
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
@@ -11,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
 
   try {
-    const response = await $fetch<any>(
+    const response = await $fetch<RegisterResponse>(
       `${runtimeConfig.public.backendUrl}/api/auth/register`,
       {
         method: 'POST',
@@ -29,11 +37,12 @@ export default defineEventHandler(async (event) => {
     });
 
     return { user, accessToken };
-  } catch (error: any) {
-    throw createError({
-      statusCode: error.response?.status || 500,
-      statusMessage:
-        error.response?._data?.error?.message || 'Registration failed',
-    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: error.message || 'Registration failed',
+      });
+    }
   }
 });

@@ -7,8 +7,9 @@ import compression from 'compression';
 import morgan from 'morgan';
 import authRoutes from './routes/auth';
 import { startCleanupScheduler } from './utils/cleanup';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
 const port = process.env.PORT || 3001;

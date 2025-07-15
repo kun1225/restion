@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia';
 
-type User = {
-  id: number;
-  username: string;
-  email: string;
-  created_at: string;
-  avatarUrl?: string;
-};
+import type { User } from '~~/types/user';
 
 type AuthState = {
   user: User | null;
