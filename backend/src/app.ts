@@ -12,12 +12,12 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT ?? 3001;
 
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
     credentials: true, // allow send cookies
   }),
 );
@@ -36,7 +36,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Restion API Server');
 });
 
-app.use((err: Error, req: Request, res: Response, next: Function) => {
+app.use((err: Error, req: Request, res: Response) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,

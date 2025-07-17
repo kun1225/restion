@@ -29,6 +29,7 @@
     "@pinia/nuxt": "^0.11.1",
     "@restion/shared": "file:../shared",
     "@tailwindcss/vite": "^4.1.8",
+    "@tanstack/vue-query": "^5.83.0",
     "@unhead/vue": "^2.0.10",
     "@vee-validate/zod": "^4.15.1",
     "@vueuse/core": "^13.5.0",
@@ -51,10 +52,10 @@
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "@vue/test-utils": "^2.4.0",
-    "tailwindcss": "^4.1.8",
-    "shadcn-nuxt": "^2.2.0",
     "happy-dom": "^15.11.7",
     "playwright-core": "^1.49.0",
+    "shadcn-nuxt": "^2.2.0",
+    "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
     "vitest": "^3.0.0"
   }

@@ -34,7 +34,6 @@ export default withNuxt({
       },
     ],
 
-    complexity: ['warn', 10],
     'no-magic-numbers': ['warn', { ignore: [-1, 0, 1] }],
   },
 });

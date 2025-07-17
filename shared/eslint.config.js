@@ -51,8 +51,6 @@ export default [
       'no-unused-vars': 'warn',
       eqeqeq: 'error',
       semi: ['error', 'always'],
-      'prefer-const': 'error',
-      'no-var': 'error',
 
       'no-magic-numbers': ['warn', { ignore: [-1, 0, 1] }],
     },
