@@ -3,21 +3,30 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Shared types and configurations for Restion frontend and backend",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "outDir": "./dist",
-
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "tsup src/index.ts --dts --format cjs,esm --out-dir dist"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
-    "eslint": "^9.27.0"
+    "eslint": "^9.27.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   }
-} 
+}

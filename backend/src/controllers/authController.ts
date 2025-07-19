@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
+import type { ApiResponse, User } from '@restion/shared';
+import { ERROR_CODES } from '@restion/shared';
 import bcrypt from 'bcryptjs';
-import { findByEmail, createUser, findById } from '../models/User';
+import { Request, Response } from 'express';
+import { createUser, findByEmail, findById } from '../models/User';
 import { hashPassword } from '../utils/hash';
 import {
   generateTokens,
-  verifyRefreshToken,
-  revokeRefreshToken,
   revokeAccessToken,
   revokeAllUserTokens,
+  revokeRefreshToken,
+  verifyRefreshToken,
 } from '../utils/jwt';
-import type { ApiResponse, User } from '@restion/shared';
-import { ERROR_CODES } from '@restion/shared';
 
 export async function registerController(
   req: Request,

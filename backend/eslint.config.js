@@ -9,9 +9,11 @@ export default [
     rules: {
       // Node.js specific rules
       'no-console': 'off', // Allow console in backend
+      'no-magic-numbers': 'off',
 
       // Backend-specific preferences (stricter)
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
 
       // Security-related rules
       'no-eval': 'error',

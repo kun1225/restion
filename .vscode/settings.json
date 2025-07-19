@@ -13,9 +13,10 @@
   ],
   "eslint.workingDirectories": [
     "./frontend",
-    "./backend"
+    "./backend",
+    "./shared"
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit", 
   }
 }
