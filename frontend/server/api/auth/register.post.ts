@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!email || !password) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Missing email or password',
+      statusMessage: '沒有輸入 email 或 password',
     });
   }
 
@@ -24,6 +24,13 @@ export default defineEventHandler(async (event) => {
     if (response.success) {
       const { user, accessToken, refreshToken } = response.data!;
 
+      setCookie(event, 'access_token', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 1 * 60 * 60 * 1000, // 1 hour
+      });
+
       setCookie(event, 'refresh_token', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -31,7 +38,7 @@ export default defineEventHandler(async (event) => {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
-      return { user, accessToken };
+      return { user };
     }
 
     throw createError({
@@ -42,7 +49,7 @@ export default defineEventHandler(async (event) => {
     if (error instanceof Error) {
       throw createError({
         statusCode: 500,
-        statusMessage: error.message || 'Registration failed',
+        statusMessage: error.message || '註冊失敗',
       });
     }
   }

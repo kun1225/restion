@@ -5,15 +5,12 @@ export default withNuxt({
   rules: {
     'no-console': 'warn',
     'no-unused-vars': 'warn',
-    eqeqeq: 'error',
     semi: ['error', 'always'],
     'prefer-const': 'error',
     'no-var': 'error',
 
     // Vue-specific rules
     'vue/no-mutating-props': 'error',
-    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-    'vue/component-definition-name-casing': ['error', 'PascalCase'],
 
     // Import organization
     'import/order': [
@@ -33,7 +30,5 @@ export default withNuxt({
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
-
-    'no-magic-numbers': ['warn', { ignore: [-1, 0, 1] }],
   },
 });

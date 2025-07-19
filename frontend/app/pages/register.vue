@@ -34,7 +34,7 @@ const registerSchema = toTypedSchema(
         .email('請輸入正確的電子郵件'),
       password: z
         .string({ required_error: '請輸入密碼' })
-        .min(8, '密碼至少需要8個字元'),
+        .min(6, '密碼至少需要 6 個字元'),
       confirmPassword: z.string({ required_error: '請輸入確認密碼' }),
     })
     .refine((data) => data.password === data.confirmPassword, {
