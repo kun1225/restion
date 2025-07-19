@@ -42,7 +42,8 @@
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
     "pg": "^8.16.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

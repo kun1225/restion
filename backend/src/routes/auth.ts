@@ -8,11 +8,13 @@ import {
   getMeController,
 } from '../controllers/authController';
 import { authenticateToken } from '../middleware/auth';
+import { validateSchema } from '../middleware/validation';
+import { registerSchema } from '../schemas/authSchemas';
 
 const router = Router();
 
 // Public routes
-router.post('/register', registerController);
+router.post('/register', validateSchema(registerSchema), registerController);
 router.post('/login', loginController);
 router.post('/refresh', refreshTokenController);
 

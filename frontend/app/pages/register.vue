@@ -29,16 +29,28 @@ const router = useRouter();
 const registerSchema = toTypedSchema(
   z
     .object({
-      email: z
-        .string({ required_error: '請輸入電子郵件' })
-        .email('請輸入正確的電子郵件'),
+      email: z.email({
+        pattern: z.regexes.html5Email,
+        error: (issue) =>
+          issue.input === undefined ? '請輸入電子郵件' : '電子郵件格式不正確',
+      }),
       password: z
-        .string({ required_error: '請輸入密碼' })
-        .min(6, '密碼至少需要 6 個字元'),
-      confirmPassword: z.string({ required_error: '請輸入確認密碼' }),
+        .string({
+          error: (issue) =>
+            issue.input === undefined ? '請輸入密碼' : '密碼格式不正確',
+        })
+        .min(8, '密碼至少需要 8 個字元')
+        .max(64, '密碼最多只能 64 個字元'),
+      confirmPassword: z
+        .string({
+          error: (issue) =>
+            issue.input === undefined ? '請輸入確認密碼' : '確認密碼格式不正確',
+        })
+        .min(8, '確認密碼至少需要 8 個字元')
+        .max(64, '確認密碼最多只能 64 個字元'),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: '密碼不同',
+      message: '輸入的密碼不同',
       path: ['confirmPassword'],
     }),
 );

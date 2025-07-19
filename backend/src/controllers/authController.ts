@@ -11,12 +11,11 @@ import {
   revokeRefreshToken,
   verifyRefreshToken,
 } from '../utils/jwt';
+import type { RegisterResponse } from '@restion/shared';
 
 export async function registerController(
   req: Request,
-  res: Response<
-    ApiResponse<{ user: User; accessToken: string; refreshToken: string }>
-  >,
+  res: Response<ApiResponse<RegisterResponse>>,
 ) {
   try {
     const { email, password } = req.body;

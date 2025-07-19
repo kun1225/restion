@@ -23,6 +23,7 @@ export const ERROR_CODES = {
   INVALID_TOKEN: 'INVALID_TOKEN',
   USER_NOT_FOUND: 'USER_NOT_FOUND',
   INVALID_REFRESH_TOKEN: 'INVALID_REFRESH_TOKEN',
+  SCHEMA_VALIDATION_ERROR: 'SCHEMA_VALIDATION_ERROR',
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_CODES;
@@ -38,6 +39,7 @@ export const ERROR_MESSAGES = {
   [ERROR_CODES.INVALID_TOKEN]: 'Invalid token',
   [ERROR_CODES.USER_NOT_FOUND]: 'User not found',
   [ERROR_CODES.INVALID_REFRESH_TOKEN]: 'Invalid refresh token',
+  [ERROR_CODES.SCHEMA_VALIDATION_ERROR]: 'Schema validation error',
 } as const;
 
 export type ErrorMessage = (typeof ERROR_MESSAGES)[ErrorCode];
