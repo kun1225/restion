@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ERROR_CODES } from '@restion/shared';
 import { toTypedSchema } from '@vee-validate/zod';
+import { Eye, EyeOff } from 'lucide-vue-next';
 import { useForm } from 'vee-validate';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
@@ -27,6 +28,9 @@ import { useAuthStore } from '~~/stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
+
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const registerSchema = toTypedSchema(
   z
@@ -121,12 +125,25 @@ const onRegisterSubmit = handleSubmit(async (values) => {
             <FormItem>
               <FormLabel>密碼</FormLabel>
               <FormControl>
-                <Input
-                  v-model="password"
-                  type="password"
-                  placeholder="password"
-                  v-bind="passwordProps"
-                />
+                <div class="relative">
+                  <Input
+                    v-model="password"
+                    :type="showPassword ? 'text' : 'password'"
+                    placeholder="password"
+                    v-bind="passwordProps"
+                    class="pr-10"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    class="text-muted-foreground absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                    @click="showPassword = !showPassword"
+                  >
+                    <Eye v-if="!showPassword" />
+                    <EyeOff v-else />
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -135,12 +152,25 @@ const onRegisterSubmit = handleSubmit(async (values) => {
             <FormItem>
               <FormLabel>確認密碼</FormLabel>
               <FormControl>
-                <Input
-                  v-model="confirmPassword"
-                  type="password"
-                  placeholder="password"
-                  v-bind="confirmPasswordProps"
-                />
+                <div class="relative">
+                  <Input
+                    v-model="confirmPassword"
+                    :type="showConfirmPassword ? 'text' : 'password'"
+                    placeholder="password"
+                    v-bind="confirmPasswordProps"
+                    class="pr-10"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    class="text-muted-foreground absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                    @click="showConfirmPassword = !showConfirmPassword"
+                  >
+                    <Eye v-if="!showConfirmPassword" />
+                    <EyeOff v-else />
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

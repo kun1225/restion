@@ -5,7 +5,7 @@ import { type ButtonVariants, buttonVariants } from '.';
 
 import type { HTMLAttributes } from 'vue';
 
-import { cn } from '~/lib/utils';
+import { cn } from '@/lib/utils';
 
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant'];
