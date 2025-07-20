@@ -20,6 +20,7 @@ export const validateSchema = (schema: ZodObject) => {
             message: error.issues.at(0)?.message ?? 'Schema validation error',
           },
         });
+        return;
       }
 
       res.status(500).json({

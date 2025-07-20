@@ -5,8 +5,8 @@
     "paths": {
       "@/*": ["./app/*"],
       "~~/*": ["./*"],
-      "@restion/shared": ["../shared/src"],
-      "@restion/shared/*": ["../shared/src/*"]
+      "@restion/shared": ["../shared/dist"],
+      "@restion/shared/*": ["../shared/dist/*"]
     }
   }
 }

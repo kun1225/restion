@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { ERROR_CODES } from '@restion/shared';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue-sonner';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -29,23 +31,15 @@ const router = useRouter();
 const registerSchema = toTypedSchema(
   z
     .object({
-      email: z.email({
-        pattern: z.regexes.html5Email,
-        error: (issue) =>
-          issue.input === undefined ? '請輸入電子郵件' : '電子郵件格式不正確',
-      }),
+      email: z
+        .string({ required_error: '請輸入電子郵件' })
+        .email('請輸入正確的電子郵件'),
       password: z
-        .string({
-          error: (issue) =>
-            issue.input === undefined ? '請輸入密碼' : '密碼格式不正確',
-        })
+        .string({ required_error: '請輸入密碼' })
         .min(8, '密碼至少需要 8 個字元')
         .max(64, '密碼最多只能 64 個字元'),
       confirmPassword: z
-        .string({
-          error: (issue) =>
-            issue.input === undefined ? '請輸入確認密碼' : '確認密碼格式不正確',
-        })
+        .string({ required_error: '請輸入確認密碼' })
         .min(8, '確認密碼至少需要 8 個字元')
         .max(64, '確認密碼最多只能 64 個字元'),
     })
@@ -59,32 +53,43 @@ const { handleSubmit, setErrors, isSubmitting, defineField } = useForm({
   validationSchema: registerSchema,
 });
 
-const [email, emailProps] = defineField('email', {
+const fieldConfig = {
   validateOnBlur: false,
   validateOnChange: false,
   validateOnModelUpdate: false,
+};
+
+const [email, emailProps] = defineField('email', {
+  ...fieldConfig,
 });
 
 const [password, passwordProps] = defineField('password', {
-  validateOnBlur: false,
-  validateOnChange: false,
-  validateOnModelUpdate: false,
+  ...fieldConfig,
 });
 
 const [confirmPassword, confirmPasswordProps] = defineField('confirmPassword', {
-  validateOnBlur: false,
-  validateOnChange: false,
-  validateOnModelUpdate: false,
+  ...fieldConfig,
 });
 
 const onRegisterSubmit = handleSubmit(async (values) => {
   try {
-    await authStore.register(values);
-    router.push('/');
-  } catch (error: unknown) {
-    setErrors({
-      email: error instanceof Error ? error.message : 'Registration failed',
-    });
+    const response = await authStore.register(values);
+
+    if (response?.success) {
+      router.push('/');
+      toast.success('註冊成功!');
+    } else {
+      switch (response.error.code) {
+        case ERROR_CODES.EMAIL_ALREADY_REGISTERED:
+          setErrors({
+            email: '電子郵件已經被註冊',
+          });
+          break;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error('註冊失敗，請稍後再試');
   }
 });
 </script>

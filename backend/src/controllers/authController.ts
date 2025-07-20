@@ -20,18 +20,8 @@ export async function registerController(
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: ERROR_CODES.MISSING_FIELDS,
-          message: 'Missing required fields',
-        },
-      });
-      return;
-    }
-
     const existing = await findByEmail(email);
+
     if (existing) {
       res.status(409).json({
         success: false,
@@ -60,6 +50,7 @@ export async function registerController(
     });
   } catch (error) {
     console.error(error);
+
     res.status(500).json({
       success: false,
       error: {

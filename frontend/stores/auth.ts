@@ -2,10 +2,10 @@ import { defineStore } from 'pinia';
 
 import type {
   User,
-  RegisterResponse,
   RegisterRequest,
   LoginRequest,
   LoginResponse,
+  ApiResponse,
 } from '@restion/shared';
 
 type AuthState = {
@@ -38,11 +38,16 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(data: RegisterRequest) {
-      const { user } = await $fetch<RegisterResponse>('/api/auth/register', {
+      const response = await $fetch<ApiResponse<User>>('/api/auth/register', {
         method: 'POST',
         body: data,
       });
-      this.user = user;
+
+      if (response?.success) {
+        this.user = response.data!;
+      }
+
+      return response;
     },
 
     async logout() {

@@ -5,7 +5,6 @@ export default withNuxt({
   rules: {
     'no-console': 'warn',
     'no-unused-vars': 'warn',
-    semi: ['error', 'always'],
     'prefer-const': 'error',
     'no-var': 'error',
 
