@@ -66,30 +66,19 @@ export async function registerController(
 export async function loginController(
   req: Request,
   res: Response<
-    ApiResponse<{ user: User; accessToken: string; refreshToken: string }>
+    ApiResponse<{ user: User; accessToken?: string; refreshToken?: string }>
   >,
 ) {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: ERROR_CODES.MISSING_FIELDS,
-          message: 'Email and password are required',
-        },
-      });
-      return;
-    }
+    const { email, password, rememberMe } = req.body;
 
     const user = await findByEmail(email);
     if (!user) {
       res.status(401).json({
         success: false,
         error: {
-          code: ERROR_CODES.INVALID_CREDENTIALS,
-          message: 'Invalid email or password',
+          code: ERROR_CODES.EMAIL_NOT_FOUND,
+          message: 'Email not found',
         },
       });
       return;
@@ -107,20 +96,20 @@ export async function loginController(
       return;
     }
 
-    // 生成 tokens
-    const deviceInfo = {
-      userAgent: req.headers['user-agent'],
-      ip: req.ip,
-    };
-    const { accessToken, refreshToken } = await generateTokens(
-      user.id,
-      deviceInfo,
-    );
+    let tokens: { accessToken: string; refreshToken: string } | undefined =
+      undefined;
+    if (rememberMe) {
+      const deviceInfo = {
+        userAgent: req.headers['user-agent'],
+        ip: req.ip,
+      };
+      tokens = await generateTokens(user.id, deviceInfo);
+    }
 
     res.json({
       success: true,
       message: 'Login successful',
-      data: { user, accessToken, refreshToken },
+      data: { user, ...tokens },
     });
   } catch (error) {
     console.error(error);

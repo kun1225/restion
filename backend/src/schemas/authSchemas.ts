@@ -13,3 +13,12 @@ export const registerSchema = z
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
+
+export const loginSchema = z.object({
+  email: z.email({ pattern: z.regexes.html5Email }),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(64, 'Password must be less than 64 characters'),
+  rememberMe: z.boolean().optional(),
+});

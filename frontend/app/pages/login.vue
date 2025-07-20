@@ -44,16 +44,18 @@ const { handleSubmit, setErrors, isSubmitting, defineField } = useForm({
   validationSchema: loginSchema,
 });
 
-const [email, emailProps] = defineField('email', {
+const fieldConfig = {
   validateOnBlur: false,
   validateOnChange: false,
   validateOnModelUpdate: false,
+};
+
+const [email, emailProps] = defineField('email', {
+  ...fieldConfig,
 });
 
 const [password, passwordProps] = defineField('password', {
-  validateOnBlur: false,
-  validateOnChange: false,
-  validateOnModelUpdate: false,
+  ...fieldConfig,
 });
 
 const rememberMe = ref(false);

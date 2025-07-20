@@ -9,14 +9,14 @@ import {
 } from '../controllers/authController';
 import { authenticateToken } from '../middleware/auth';
 import { validateSchema } from '../middleware/validation';
-import { registerSchema } from '../schemas/authSchemas';
+import { loginSchema, registerSchema } from '../schemas/authSchemas';
 
 const router = Router();
 
 // Public routes
 router.post('/register', validateSchema(registerSchema), registerController);
-router.post('/login', loginController);
-router.post('/refresh', refreshTokenController);
+router.post('/login', validateSchema(loginSchema), loginController);
+router.post('/refresh-token', refreshTokenController);
 
 // Protected routes
 router.post('/logout', authenticateToken, logoutController);

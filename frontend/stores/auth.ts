@@ -4,7 +4,6 @@ import type {
   User,
   RegisterRequest,
   LoginRequest,
-  LoginResponse,
   ApiResponse,
 } from '@restion/shared';
 
@@ -24,17 +23,19 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async login(credentials: LoginRequest, rememberMe?: boolean) {
-      const { user } = await $fetch<LoginResponse>('/api/auth/login', {
+      const response = await $fetch<ApiResponse<User>>('/api/auth/login', {
         method: 'POST',
-        body: credentials,
+        body: {
+          ...credentials,
+          rememberMe,
+        },
       });
-      this.user = user;
 
-      if (rememberMe) {
-        localStorage.setItem('restion_user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('restion_user');
+      if (response?.success) {
+        this.user = response.data!;
       }
+
+      return response;
     },
 
     async register(data: RegisterRequest) {
